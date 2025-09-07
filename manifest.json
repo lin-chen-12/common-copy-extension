@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Common Copy - Form Filler",
+  "version": "1.0.0",
+  "description": "Quick access to commonly used form data with one-click copying",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "clipboardWrite"
+  ],
+  
+  "action": {
+    "default_title": "Open Common Copy"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
