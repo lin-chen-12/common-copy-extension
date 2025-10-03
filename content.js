@@ -53,24 +53,21 @@ function removeOverlay() {
 }
 
 function loadReactApp() {
-  // This will load your built React app
-  // We'll inject the built CSS and JS files
   const contentDiv = overlayContainer.querySelector(".common-copy-content");
 
-  // For now, let's create a simple version
-  // Later we'll inject your actual React app
-  contentDiv.innerHTML = `
-    <div class="entry-item">
-      <label>Email:</label>
-      <span>john@example.com</span>
-      <button class="copy-btn" onclick="copyToClipboard('john@example.com')">Copy</button>
-    </div>
-    <div class="entry-item">
-      <label>Name:</label>
-      <span>John Doe</span>
-      <button class="copy-btn" onclick="copyToClipboard('John Doe')">Copy</button>
-    </div>
-  `;
+  // Create a div for your Preact app to mount to
+  contentDiv.innerHTML = '<div id="extension-app"></div>';
+
+  // Inject your built CSS and JS files
+  const link = document.createElement("link");
+  link.href = chrome.runtime.getURL("dist/assets/index-C_dcRlyO.css");
+  link.rel = "stylesheet";
+  document.head.appendChild(link);
+
+  const script = document.createElement("script");
+  script.src = chrome.runtime.getURL("dist/assets/index-DVvQPh2w.js");
+  script.type = "module";
+  document.head.appendChild(script);
 }
 
 // Global function to remove overlay (called from close button)
