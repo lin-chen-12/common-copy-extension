@@ -28,7 +28,7 @@ function createOverlay() {
     <div class="common-copy-container">
       <div class="common-copy-header">
         <h3>Common Copy</h3>
-        <button class="common-copy-close" onclick="window.removeCommonCopyOverlay()">×</button>
+        <button class="common-copy-close" id="common-copy-close-btn">×</button>
       </div>
       <div class="common-copy-content">
         <div class="common-copy-loading">Loading...</div>
@@ -39,6 +39,10 @@ function createOverlay() {
   // Add to page
   document.body.appendChild(overlayContainer);
   overlayExists = true;
+
+  // Add event listener to close button
+  const closeBtn = overlayContainer.querySelector("#common-copy-close-btn");
+  closeBtn.addEventListener("click", removeOverlay);
 
   // Load your React app into the overlay
   loadReactApp();
@@ -52,22 +56,37 @@ function removeOverlay() {
   }
 }
 
-function loadReactApp() {
+async function loadReactApp() {
   const contentDiv = overlayContainer.querySelector(".common-copy-content");
-
-  // Create a div for your Preact app to mount to
   contentDiv.innerHTML = '<div id="extension-app"></div>';
 
-  // Inject your built CSS and JS files
-  const link = document.createElement("link");
-  link.href = chrome.runtime.getURL("dist/assets/index-C_dcRlyO.css");
-  link.rel = "stylesheet";
-  document.head.appendChild(link);
+  try {
+    // Fetch the manifest to get actual filenames
+    const manifestResponse = await fetch(
+      chrome.runtime.getURL("dist/.vite/manifest.json")
+    );
+    const manifest = await manifestResponse.json();
 
-  const script = document.createElement("script");
-  script.src = chrome.runtime.getURL("dist/assets/index-DVvQPh2w.js");
-  script.type = "module";
-  document.head.appendChild(script);
+    const entry = manifest["src/main.tsx"];
+
+    // Inject CSS
+    if (entry.css) {
+      entry.css.forEach((cssFile) => {
+        const link = document.createElement("link");
+        link.href = chrome.runtime.getURL(`dist/${cssFile}`);
+        link.rel = "stylesheet";
+        document.head.appendChild(link);
+      });
+    }
+
+    // Inject JS
+    const script = document.createElement("script");
+    script.src = chrome.runtime.getURL(`dist/${entry.file}`);
+    script.type = "module";
+    document.head.appendChild(script);
+  } catch (error) {
+    console.error("Failed to load manifest:", error);
+  }
 }
 
 // Global function to remove overlay (called from close button)

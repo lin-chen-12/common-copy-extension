@@ -29,9 +29,9 @@
   },
   
   "web_accessible_resources": [
-    {
-      "resources": ["assets/*"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+      {
+         "resources": ["dist/*", "dist/assets/*", "dist/.vite/*"],
+         "matches": ["<all_urls>"]
+      }
+   ]
 }
