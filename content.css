@@ -3,7 +3,7 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  width: 400px;
+  width: 600px;
 
   z-index: 2147483647; /* Maximum z-index */
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

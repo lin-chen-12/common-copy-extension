@@ -69,7 +69,7 @@ async function loadReactApp() {
 
     const entry = manifest["src/main.tsx"];
 
-    // Inject CSS
+    // Inject CSS first
     if (entry.css) {
       entry.css.forEach((cssFile) => {
         const link = document.createElement("link");
@@ -79,11 +79,13 @@ async function loadReactApp() {
       });
     }
 
-    // Inject JS
-    const script = document.createElement("script");
-    script.src = chrome.runtime.getURL(`dist/${entry.file}`);
-    script.type = "module";
-    document.head.appendChild(script);
+    // Wait a bit for CSS to load, then inject JS
+    setTimeout(() => {
+      const script = document.createElement("script");
+      script.src = chrome.runtime.getURL(`dist/${entry.file}`);
+      script.type = "module";
+      document.head.appendChild(script);
+    }, 100);
   } catch (error) {
     console.error("Failed to load manifest:", error);
   }

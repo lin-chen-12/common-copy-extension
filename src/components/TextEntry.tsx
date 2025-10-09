@@ -1,13 +1,24 @@
 import { useState } from "preact/hooks";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface TextEntryProps {
+  id: number;
   onSave?: (text: string) => void;
   onDelete?: () => void;
 }
 
-export function TextEntry({ onSave, onDelete }: TextEntryProps) {
+export function TextEntry({ id, onSave, onDelete }: TextEntryProps) {
   const [text, setText] = useState("");
   const [isEditing, setIsEditing] = useState(true);
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const handleSave = () => {
     setIsEditing(false);
@@ -18,8 +29,35 @@ export function TextEntry({ onSave, onDelete }: TextEntryProps) {
     setIsEditing(true);
   };
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log("Copied to clipboard:", text);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
   return (
-    <div className="flex items-center gap-2 p-2 border rounded">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-2 p-2 border rounded bg-white"
+    >
+      <div
+        {...(attributes as any)}
+        {...listeners}
+        className="cursor-grab active:cursor-grabbing p-1 text-gray-400 hover:text-gray-600"
+        // role="button"
+        // tabIndex={0}
+        // aria-disabled={false}
+        // aria-pressed={undefined}
+        // aria-roledescription="sortable"
+        // aria-describedby=""
+      >
+        ⋮⋮
+      </div>
+
       {isEditing ? (
         <>
           <input
@@ -46,8 +84,8 @@ export function TextEntry({ onSave, onDelete }: TextEntryProps) {
             Edit
           </button>
           <button
-            className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
-            disabled
+            onClick={handleCopy}
+            className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600"
           >
             Copy
           </button>
