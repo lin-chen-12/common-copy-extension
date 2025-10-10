@@ -4,13 +4,14 @@ import { CSS } from "@dnd-kit/utilities";
 
 interface TextEntryProps {
   id: number;
+  initialText?: string;
   onSave?: (text: string) => void;
   onDelete?: () => void;
 }
 
-export function TextEntry({ id, onSave, onDelete }: TextEntryProps) {
-  const [text, setText] = useState("");
-  const [isEditing, setIsEditing] = useState(true);
+export function TextEntry({ id, initialText = "", onSave, onDelete }: TextEntryProps) {
+  const [text, setText] = useState(initialText);
+  const [isEditing, setIsEditing] = useState(!initialText);
 
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
