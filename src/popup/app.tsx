@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "react";
 
 import "./app.css";
 import { TextEntry } from "./components/TextEntry";
@@ -104,7 +104,20 @@ export function App() {
   }
 
   return (
-    <div className="p-4">
+    <div className="bg-white min-h-screen p-4">
+
+
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-sm font-semibold text-gray-700">Common Copy</h3>
+        <button
+          onClick={() => window.parent.postMessage({ action: 'closeOverlay' }, '*')}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
+      </div>
+
+
       <button
         onClick={addNewEntry}
         className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

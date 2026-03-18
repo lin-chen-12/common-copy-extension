@@ -1,37 +1,36 @@
 {
-  "manifest_version": 3,
-  "name": "Common Copy - Form Filler",
-  "version": "1.0.0",
-  "description": "Quick access to commonly used form data with one-click copying",
-  
-  "permissions": [
-    "activeTab",
-    "storage",
-    "clipboardWrite",
-    "scripting"
+   "manifest_version": 3,
+   "name": "Common Copy - Form Filler",
+   "version": "1.0.0",
+   "description": "Quick access to commonly used form data with one-click copying",
+   
+   "permissions": [
+      "activeTab",
+      "storage",
+      "clipboardWrite",
+      "scripting"
 
-  ],
+   ],
   
-  "action": {
-    "default_title": "Open Common Copy"
-  },
+   "action": {
+      "default_title": "Open Common Copy"
+
+   },
+   
+   "web_accessible_resources": [{
+      "resources": ["src/popup/index.html"],
+      "matches": ["<all_urls>"]
+   }],
+
+   "background": {
+      "service_worker": "src/background/index.ts"
+   },
+
+   "content_scripts": [{ 
+      "matches": ["<all_urls>"], 
+      "js": ["src/content/index.ts"] 
+   }]
   
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["content.css"]
-    }
-  ],
+ 
   
-  "background": {
-    "service_worker": "background.js"
-  },
-  
-  "web_accessible_resources": [
-      {
-         "resources": ["dist/*", "dist/assets/*", "dist/.vite/*"],
-         "matches": ["<all_urls>"]
-      }
-   ]
 }

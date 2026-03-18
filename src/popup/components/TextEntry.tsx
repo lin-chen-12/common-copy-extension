@@ -1,4 +1,6 @@
-import { useState } from "preact/hooks";
+
+import { useState } from "react";
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
@@ -17,7 +19,9 @@ export function TextEntry({ id, initialText = "", onSave, onDelete }: TextEntryP
     useSortable({ id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(
+      transform ? { ...transform, x: 0 } : null,
+    ),
     transition,
   };
 
@@ -64,13 +68,18 @@ export function TextEntry({ id, initialText = "", onSave, onDelete }: TextEntryP
           <input
             type="text"
             value={text}
-            onChange={(e) => setText((e.target as HTMLInputElement).value)}
+            onChange={(e) => setText(e.currentTarget.value)}
             className="flex-1 px-2 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter text..."
           />
           <button
             onClick={handleSave}
-            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+            disabled={!text.trim()}
+            className={`px-3 py-1 rounded ${
+              text.trim()
+                ? "bg-green-500 text-white hover:bg-green-600 cursor-pointer"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
           >
             Save
           </button>
